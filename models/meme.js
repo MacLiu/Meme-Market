@@ -8,7 +8,7 @@ mongoose.connect("mongodb://localhost/mememarket");
 var db = mongoose.connection;
 
 //Meme Schema
-var UserSchema = new mongoose.Schema({
+var MemeSchema = new mongoose.Schema({
 	meme : {
 		type : String,
 		index : true
@@ -18,46 +18,14 @@ var UserSchema = new mongoose.Schema({
 	}
 });
 
-var User = module.exports = mongoose.model('users', UserSchema);
+var Meme = module.exports = mongoose.model('memes', MemeSchema);
 
-/*
- *	Function hashs user's password. 
- *	TODO - UPDATE HASHING METHOD, TOO SIMPLE ATM
- */
-var hash = function (str) {
-	var result = "";
-	var charcode = 0;
-	for (var i = 0; i < str.length; i++) {
-        charcode = (str[i].charCodeAt()) + 3;
-        result += String.fromCharCode(charcode);	
-    }
-	return result;
-};
-
-/*
- *	Function compares the login password given, to the user's stored password.
- */
-module.exports.comparePassword = function(candidatePassword, hashp, callback) {
-	candidatePassword = hash(candidatePassword);
-	if (candidatePassword == hashp) {
-		callback(null, true);
-	} else {
-		callback(null, false);
-	}
+module.exports.getHistoryByMeme = function(meme, callback) {
+	Meme.find("_meme" : meme, callback);
 }
 
-/*
- *	Function returns the user from the given ID
- */
-module.exports.getUserById = function(id, callback) {
-	Applicant.findById(id, callback);
-}
-
-/*
- *	Function creates a new user from given user information
- */
-module.exports.createUser = function(newUser, callback) {
-	newUser.save(callback);
+module.exports.saveMeme = function(meme, callback) {
+	meme.save(callback);
 }
 
 
