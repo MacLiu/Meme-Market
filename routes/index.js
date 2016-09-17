@@ -12,8 +12,7 @@ router.get('/meme/:memeName',function(req,res,next){
 	var memeName = req.params.memeName;
 	var requestName = 'https://memegen.link/templates/' + memeName;
 	requestify.get(requestName).then(function(response){
-		console.log(response.getBody());
-		res.send();
+		res.send(response.getBody());
 		
 	});
 
