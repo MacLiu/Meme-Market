@@ -22,7 +22,7 @@ router.get('/meme/:memeName',function(req,res,next){
 router.get('/allmemes',function(req,res,next){
 	var requestName = 'https://memegen.link/templates/';
 	requestify.get(requestName).then(function(response){
-		res.send(req.getBody());
+		res.send(response.getBody());
 	});
 });
 
