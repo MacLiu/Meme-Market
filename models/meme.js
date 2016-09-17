@@ -1,23 +1,20 @@
 /*
- * Users Model.
+ * Meme Model.
  * @author - Mac Liu
  */
 
 var mongoose = require('mongoose');
-mongoose.connect("mongodb://localhost/hackmit");
+mongoose.connect("mongodb://localhost/mememarket");
 var db = mongoose.connection;
 
-//User Schema
+//Meme Schema
 var UserSchema = new mongoose.Schema({
-	username : {
+	meme : {
 		type : String,
 		index : true
 	},
-	level : {
-		type : String
-	},
-	answer : {
-		type : String
+	score : {
+		type : Double
 	}
 });
 
