@@ -14,17 +14,14 @@ router.get('/meme/:memeName',function(req,res,next){
 	requestify.get(requestName).then(function(response){
 		var json = response.getBody();
 		var imgURL = json.example;
-		var first = imgURL.substring(0,20 + memeName.length());
-		console.log(first);
-		var second = imgURL.substring(21 + memeName.length(),imgURL.length());
-		var middle = '/_/_' + second;
+		var first = imgURL.substring(0,21 + memeName.length);
+		var middle = '/_/_.jpg';
 		var final = first + middle;
-		console.log(second);
-		console.log(middle);
-		console.log(final); 
-		res.send(json.example);
+		res.send(final);
 
-		
+	})
+	.fail(function(response){
+		res.send(response.getCode());
 	});
 
 
@@ -33,7 +30,7 @@ router.get('/meme/:memeName',function(req,res,next){
 router.get('/allmemes',function(req,res,next){
 	var requestName = 'https://memegen.link/templates/';
 	requestify.get(requestName).then(function(response){
-		res.send(req.getBody());
+		res.send(response.getBody());
 	});
 });
 
