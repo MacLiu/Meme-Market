@@ -44,21 +44,26 @@ router.get('/allmemes',function(req,res,next){
 	});
 });
 
-function handleResponse(response){
-  console.log('promise response:', JSON.stringify(response));
+function handleResponse(response1){
+//  console.log('promise response:', JSON.stringify(response1));
   //do shit with original data
   var baseURL = 'https://www.reddit.com/r/adviceanimals/hot/.json?limit=100'
   requestify.get(baseURL).then(function(response){
   	var json = response.getBody();
   	var data = json.data;
-  	console.log(json) ;
   	var children = data.children;
   	var after = data.after;
   	for(var i = 0;i<children.length;i++){
   		var post = children[i];
   		var postdata = post.data;
   		if(!(postdata.is_self)){
-  			var img = postdata.url + '.jpg';
+  			var img = postdata.url;
+  			var filetype = img.substring(img.length-3,img.length);
+  			if(!(filetype === 'jpg'||filetype === 'png')){
+  				img = img + '.jpg';
+  			}
+
+
   			console.log(img);
   		}
   	}
