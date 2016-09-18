@@ -45,19 +45,20 @@ router.get('/allmemes',function(req,res,next){
 });
 
 function handleResponse(response){
-  //console.log('promise response:', JSON.stringify(response));
+  console.log('promise response:', JSON.stringify(response));
   //do shit with original data
   var baseURL = 'https://www.reddit.com/r/adviceanimals/hot/.json?limit=100'
   requestify.get(baseURL).then(function(response){
-  	var data = response.getBody();
-  	conosle.log(data);
+  	var json = response.getBody();
+  	var data = json.data;
+  	console.log(json) ;
   	var children = data.children;
-  	var after = children.after;
+  	var after = data.after;
   	for(var i = 0;i<children.length;i++){
-  		var post = children.get(i);
+  		var post = children[i];
   		var postdata = post.data;
   		if(!(postdata.is_self)){
-  			var img = postdata.url;
+  			var img = postdata.url + '.jpg';
   			console.log(img);
   		}
   	}
