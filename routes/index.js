@@ -45,7 +45,6 @@ router.get('/allmemes',function(req,res,next){
 });
 
 function handleResponse(response0){
-  //do shit with original data
   var baseURL = 'https://www.reddit.com/r/adviceanimals/hot/.json?limit=100'
   requestify.get(baseURL).then(function(response){
   	var json = response.getBody();
@@ -57,6 +56,11 @@ function handleResponse(response0){
   		var postdata = post.data;
   		if(!(postdata.is_self)){
   			var imgURL = postdata.url;
+  			var filetype = imgURL.substring(imgURL.length-3,imgURL.length);
+  			if(!(filetype === 'jpg'||filetype === 'png')){
+  				imgURL = imgURL + '.jpg';
+  			}
+
   			Clarifai.getTagsByUrl(imgURL).then(
   				function handleResponse(response1) {
   					compareMemeObjects(response0, response1);
