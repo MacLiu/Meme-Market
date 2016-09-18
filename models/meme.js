@@ -7,6 +7,8 @@ var mongoose = require('mongoose');
 mongoose.connect("mongodb://localhost/mememarket");
 var db = mongoose.connection;
 
+mongoose.Promise = global.Promise;
+
 //Meme Schema
 var MemeSchema = new mongoose.Schema({
 	meme : {
@@ -14,18 +16,19 @@ var MemeSchema = new mongoose.Schema({
 		index : true
 	},
 	score : {
-		type : Double
+		type : Number
+	},
+	timestamp : {
+		type : Date
 	}
 });
 
 var Meme = module.exports = mongoose.model('memes', MemeSchema);
 
 module.exports.getHistoryByMeme = function(meme, callback) {
-	Meme.find("_meme" : meme, callback);
+	Meme.find({'meme' : meme}, callback);
 }
 
-module.exports.saveMeme = function(meme, callback) {
-	meme.save(callback);
+module.exports.createMeme = function(newMeme, callback) {
+	newMeme.save(callback);
 }
-
-
