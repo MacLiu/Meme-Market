@@ -44,22 +44,25 @@ router.get('/allmemes',function(req,res,next){
 	});
 });
 
-function handleResponse(response){
-  console.log('promise response:', JSON.stringify(response));
+function handleResponse(response0){
   //do shit with original data
   var baseURL = 'https://www.reddit.com/r/adviceanimals/hot/.json?limit=100'
   requestify.get(baseURL).then(function(response){
   	var json = response.getBody();
   	var data = json.data;
-  	console.log(json) ;
   	var children = data.children;
   	var after = data.after;
   	for(var i = 0;i<children.length;i++){
   		var post = children[i];
   		var postdata = post.data;
   		if(!(postdata.is_self)){
-  			var img = postdata.url + '.jpg';
-  			console.log(img);
+  			var imgURL = postdata.url;
+  			Clarifai.getTagsByUrl(imgURL).then(
+  				function handleResponse(response1) {
+  					compareMemeObjects(response0, response1);
+  				},
+  				handleError
+			);
   		}
   	}
   })
@@ -71,5 +74,28 @@ function handleResponse(response){
 function handleError(err){
   console.log('promise error:', err);
 };
+
+function compareMemeObjects(meme1, meme2) {
+	var tags1 = meme1.results[0].result.tag.classes;
+	var tags2 = meme1.results[0].result.tag.classes;
+
+	var same = 0;
+	for (var i = 0; i < tag1.length; i++) {
+		for (var j = 0; j < tag2.length; j++) {
+			if (tag1[i] == tag2[j]){
+				same += 1;
+				break;
+			}
+		}
+	}
+
+	var ratio = same / tag1.length;
+	if (ratio > 0.5) {
+		return true;
+	} else {
+		return false;
+	}
+	
+}
 
 module.exports = router;
